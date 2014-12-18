@@ -8,6 +8,9 @@ This program accepts a url or hashtag from stdin and prints the underlying phras
 			'#ILove3000' 			 ---->	'i love 3000'
 
 """
+corpusfile = 'words.txt'
+global corpus
+corpus = open(corpusfile,'r').read().split()
 
 def clean( urlhash ) :
 	# returns urlhash without url decorations, hashtags, lowercase, and so just numbers and letters
@@ -29,7 +32,7 @@ def clean( urlhash ) :
 	# for any lingering non-alphanumeric characters
 	validchars = 'abcdefghijklmnopqrstuvwxyz0123456789'
 	cleaned = ''.join(char for char in cleaned if char in validchars)
-	
+
 	return cleaned
 
 def get_next_token( urlhash ) :
