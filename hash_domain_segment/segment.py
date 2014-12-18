@@ -39,14 +39,18 @@ def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
 	#if no token returns ''
 
-	next, remaining = urlhash, ''
-	while True:
-		print 'next |{}| and remaining |{}|'.format(next, remaining)
-		if next in corpus or next == '' :
-			break
-		next, remaining = next[:-1], next[-1] + remaining 
+	#handle the number case...
+	if urlhash[0].isnum() :
+		
 
-	return (next, remaining)
+	cand, remaining = urlhash, ''
+	while True:
+		# print 'cand |{}| and remaining |{}|'.format(cand, remaining)
+		if cand in corpus or cand == '' :
+			break
+		cand, remaining = cand[:-1], cand[-1] + remaining 
+
+	return (cand, remaining)
 
 if __name__ == '__main__' :
 
@@ -57,8 +61,8 @@ if __name__ == '__main__' :
 	segmented_urlhash = ''
 
 	while urlhash != '' :
-		next, urlhash = get_next_token(urlhash, corpus)
-		segmented_urlhash += '_'+next
+		cand, urlhash = get_next_token(urlhash, corpus)
+		segmented_urlhash += '_'+cand
 
 	print segmented_urlhash
 
