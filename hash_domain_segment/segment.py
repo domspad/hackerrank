@@ -8,9 +8,6 @@ This program accepts a url or hashtag from stdin and prints the underlying phras
 			'#ILove3000' 			 ---->	'i love 3000'
 
 """
-corpusfile = 'words.txt'
-global corpus
-corpus = open(corpusfile,'r').read().split()
 
 def clean( urlhash ) :
 	# returns urlhash without url decorations, hashtags, lowercase, and so just numbers and letters
@@ -56,18 +53,25 @@ def get_next_token( urlhash , corpus ) :
 
 	return (cand, remaining)
 
-if __name__ == '__main__' :
-
-	corpusfile = 'words.txt'
-	corpus = open(corpusfile,'r').read().split()
-
-	urlhash = clean(raw_input())
+def segment( urlhash ) :
+	#The main function
+	#returns the segmented version of the given url or hashtag (without the url and hashtage features)
 	tokens = []
 
 	while urlhash != '' :
 		cand, urlhash = get_next_token(urlhash, corpus)
 		tokens.append(cand)
 
+	return ' '.join(tokens)
 
-	print ' '.join(tokens)
+if __name__ == '__main__' :
+
+	corpusfile = 'words.txt'
+	corpus = open(corpusfile,'r').read().lower().split()
+
+	iterations = int(raw_input())
+	for num in xrange(iterations) :
+
+		urlhash = clean(raw_input())
+		print segment(urlhash)
 
