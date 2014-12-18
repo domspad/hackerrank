@@ -11,13 +11,19 @@ This program accepts a url or hashtag from stdin and prints the underlying phras
 
 def clean( urlhash ) :
 	# returns urlhash without url decorations, hashtags, lowercase, and so just numbers and letters
-	return
+	return cleaned
 
 def get_next_token( urlhash ) :
 	#returns the longest possible token starting from the left
-	return
+	return (next, remaining)
 
 if __name__ == '__main__' :
 	urlhash = raw_input()
-	print urlhash
+	segmented_urlhash = ''
+
+	while urlhash != '' :
+		next, urlhash = get_next_token(urlhash)
+		segmented_urlhash += next
+
+	print segmented_urlhash
 
