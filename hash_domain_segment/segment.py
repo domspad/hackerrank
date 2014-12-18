@@ -11,14 +11,35 @@ This program accepts a url or hashtag from stdin and prints the underlying phras
 
 def clean( urlhash ) :
 	# returns urlhash without url decorations, hashtags, lowercase, and so just numbers and letters
+	cleaned = urlhash.lower()
+	
+	# if hashtag
+	if cleaned[0] == '#' :
+		cleaned = cleaned[1:]
+
+	# if website url
+	elif cleaned[:3] == 'www' :
+		firstdot = cleaned.find('.')
+		seconddot = cleaned.find('.',firstdot+1)
+		cleaned = cleaned[firstdot+1 : seconddot]
+
+	# outside cases we consider
+	else :
+		'neither?!'
+	# for any lingering non-alphanumeric characters
+	validchars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+	cleaned = ''.join(char for char in cleaned if char in validchars)
+	
 	return cleaned
 
 def get_next_token( urlhash ) :
 	#returns the longest possible token starting from the left
+	next = urlhash[0]
+	remaining = urlhash[1:]
 	return (next, remaining)
 
 if __name__ == '__main__' :
-	urlhash = raw_input()
+	urlhash = clean(raw_input())
 	segmented_urlhash = ''
 
 	while urlhash != '' :
