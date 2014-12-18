@@ -37,9 +37,15 @@ def clean( urlhash ) :
 
 def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
-	#assumes global
-	next = urlhash[0]
-	remaining = urlhash[1:]
+	#if no token returns ''
+
+	next, remaining = urlhash, ''
+	while True:
+		print 'next |{}| and remaining |{}|'.format(next, remaining)
+		if next in corpus or next == '' :
+			break
+		next, remaining = next[:-1], next[-1] + remaining 
+
 	return (next, remaining)
 
 if __name__ == '__main__' :
@@ -52,7 +58,7 @@ if __name__ == '__main__' :
 
 	while urlhash != '' :
 		next, urlhash = get_next_token(urlhash, corpus)
-		segmented_urlhash += next
+		segmented_urlhash += '_'+next
 
 	print segmented_urlhash
 
