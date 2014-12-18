@@ -38,12 +38,16 @@ def clean( urlhash ) :
 def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
 	#if no token returns ''
+	cand, remaining = urlhash, ''
 
 	#handle the number case...
-	if urlhash[0].isnum() :
-		
+	if urlhash[0].isdigit() :
+		for ind, char in enumerate(cand) :
+			if not char.isdigit() :
+				cand, remaining = cand[:ind], cand[ind:]
+				break
+		return cand, remaining
 
-	cand, remaining = urlhash, ''
 	while True:
 		# print 'cand |{}| and remaining |{}|'.format(cand, remaining)
 		if cand in corpus or cand == '' :
