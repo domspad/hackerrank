@@ -35,18 +35,23 @@ def clean( urlhash ) :
 
 	return cleaned
 
-def get_next_token( urlhash ) :
+def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
+	#assumes global
 	next = urlhash[0]
 	remaining = urlhash[1:]
 	return (next, remaining)
 
 if __name__ == '__main__' :
+
+	corpusfile = 'words.txt'
+	corpus = open(corpusfile,'r').read().split()
+
 	urlhash = clean(raw_input())
 	segmented_urlhash = ''
 
 	while urlhash != '' :
-		next, urlhash = get_next_token(urlhash)
+		next, urlhash = get_next_token(urlhash, corpus)
 		segmented_urlhash += next
 
 	print segmented_urlhash
