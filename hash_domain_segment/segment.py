@@ -62,11 +62,12 @@ if __name__ == '__main__' :
 	corpus = open(corpusfile,'r').read().split()
 
 	urlhash = clean(raw_input())
-	segmented_urlhash = ''
+	tokens = []
 
 	while urlhash != '' :
 		cand, urlhash = get_next_token(urlhash, corpus)
-		segmented_urlhash += '_'+cand
+		tokens.append(cand)
 
-	print segmented_urlhash
+
+	print ' '.join(tokens)
 
