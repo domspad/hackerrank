@@ -75,14 +75,14 @@ def goDown( remaining, limit, corpus ) :
 	"""
 	Steps down the search tree
 
-	Requires: limit <=len(remaining)+1, remaining != ''
+	Requires: limit <=len(remaining)+1
 	Returns : longest valid substring (of length < limit) from remaining starting from beginning (in corpus or is number)
 				otherwise, returns '' 
 	"""
 	longest  = remaining[:limit-1]
 
 	#handle the number case...
-	if longest[0].isdigit() :
+	if longest != '' and longest[0].isdigit() :
 		for ind, char in enumerate(longest) :
 			if not char.isdigit():
 				longest = longest[:ind]	
@@ -161,5 +161,5 @@ if __name__ == '__main__' :
 	for num in xrange(iterations) :
 
 		urlhash = clean(raw_input())
-		print tokenize(urlhash)
+		print tokenize(urlhash,corpus)
 
