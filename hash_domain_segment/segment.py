@@ -69,13 +69,37 @@ def isDone( remaining ) :
 	"""
 	return remaining == ''
 
-def Down( remaining, limit ) :
+def goDown( remaining, limit ) :
 	"""
+	Steps down the search tree
+
 	Requires: limit <=len(remaining)
 	Returns : longest valid substring from remaining starting from beginning (in corpus or is number)
-				otherwise, throws exception
+				otherwise, throws exception to be handled by putBack
 	"""
-	return
+	longest = 1
+
+	return longest
+
+def putBack( tokens, remaining):
+	"""
+	Moves back up the tree and sets up so next search step goes down next branch (if there)
+
+	Requires : tokens non empty
+	Returns : tokens with one less token, and remaining prefixed with popped token, and size of popped token
+				if tokens == []  then throws exception to be handled by tokenize to report failure
+	"""
+	return tokens, remaining, limit
+
+def tokenize(urlhash) :
+	"""
+	The main algorithm -- performs depth first search to tokenize the urlhash into words
+
+	Returns : tokenized version of urlhash (as string) 
+				if catches exception from putBack, then prints 'FAILURE {}'.format(urlhash)
+	"""
+	return tokenized
+
 
 def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
