@@ -18,10 +18,39 @@ def clean( urlhash ) :
 		cleaned = cleaned[1:]
 
 	# if website url
-	elif cleaned[:3] == 'www' :
-		firstdot = cleaned.find('.')
-		seconddot = cleaned.find('.',firstdot+1)
-		cleaned = cleaned[firstdot+1 : seconddot]
+
+	"""
+	contains '.'
+		start 
+			if http<s>://
+			if www.
+			
+			(-
+			www.
+			http<s>://
+			http<s>://www.)
+
+		end
+			remove after next dot
+
+			(.com
+			.co.uk
+			.sfgov.org/
+			.io/)
+	"""
+	#check if webaddress
+	elif '.' in cleaned :
+		#remove possible prefixes
+		if cleaned[:8] == 'https://' :
+			cleaned = cleaned[8:]
+		elif cleaned[:7] == 'http://' :
+			cleaned = cleaned[7:]
+		if cleaned[:4] == 'www.' :
+			cleaned = cleaned[4:]
+
+	#remove suffixes by removing everything after next dot
+		nextdot = cleaned.find('.')
+		cleaned = cleaned[:nextdot]
 
 	# outside cases we consider
 	else :
