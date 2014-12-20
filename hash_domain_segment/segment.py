@@ -69,7 +69,7 @@ def isDone( remaining ) :
 	"""
 	return remaining == ''
 
-def goDown( remaining, limit ) :
+def goDown( remaining, limit, corpus ) :
 	"""
 	Steps down the search tree
 
@@ -77,7 +77,28 @@ def goDown( remaining, limit ) :
 	Returns : longest valid substring from remaining starting from beginning (in corpus or is number)
 				otherwise, throws exception to be handled by putBack
 	"""
-	longest = 1
+	try :
+		cand  = remaining[:limit-1]
+
+		#handle the number case...
+		if cand[0].isdigit()
+			for ind, char in enumerate(cand) :
+				if not char.isdigit():
+					cand = cand[:ind]
+					break
+
+		#handle the word case
+		while True:
+			if cand in corpus :
+				break
+			elif cand == '' :
+				raise NameError #<HERE ENDDED??
+			cand = cand[:-1]
+
+		return cand
+
+	except :
+
 
 	return longest
 
