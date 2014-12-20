@@ -63,62 +63,85 @@ def clean( urlhash ) :
 	cleaned = ''.join(char for char in cleaned if char in validchars)
 	return cleaned
 
+
 def isDone( remaining ) :
 	"""
 	Returns : True if remaining is empty string, else False
 	"""
 	return remaining == ''
 
+
 def goDown( remaining, limit, corpus ) :
 	"""
 	Steps down the search tree
 
 	Requires: limit <=len(remaining)
-	Returns : longest valid substring from remaining starting from beginning (in corpus or is number)
-				otherwise, throws exception to be handled by putBack
+	Returns : longest valid substring (of length < limit) from remaining starting from beginning (in corpus or is number)
+				otherwise, returns '' 
 	"""
-	try :
-		cand  = remaining[:limit-1]
+	longest  = remaining[:limit-1]
 
-		#handle the number case...
-		if cand[0].isdigit()
-			for ind, char in enumerate(cand) :
-				if not char.isdigit():
-					cand = cand[:ind]
-					break
-
-		#handle the word case
-		while True:
-			if cand in corpus :
+	#handle the number case...
+	if longest[0].isdigit() :
+		for ind, char in enumerate(longest) :
+			if not char.isdigit():
+				longest = longest[:ind]
 				break
-			elif cand == '' :
-				raise NameError #<HERE ENDDED??
-			cand = cand[:-1]
 
-		return cand
-
-	except :
-
+	#handle the word case
+	while True:
+		if longest in corpus or longest == '':
+			break
+		longest = longest[:-1]
 
 	return longest
+
 
 def putBack( tokens, remaining):
 	"""
 	Moves back up the tree and sets up so next search step goes down next branch (if there)
 
 	Requires : tokens non empty
+	Effects : pops element from tokens if nonempty
 	Returns : tokens with one less token, and remaining prefixed with popped token, and size of popped token
-				if tokens == []  then throws exception to be handled by tokenize to report failure
+				if tokens == []  then limit == 0
 	"""
-	return tokens, remaining, limit
+	try :
+		last_token = tokens.pop()
+		remaining = last_token + remaining
+		limit = len(last_token)
 
-def tokenize(urlhash) :
+	except IndexError :
+		limit = 0
+
+	return remaining, limit
+
+def tokenize(urlhash, corpus) :
 	"""
 	The main algorithm -- performs depth first search to tokenize the urlhash into words
 
 	Returns : tokenized version of urlhash (as string) 
 				if catches exception from putBack, then prints 'FAILURE {}'.format(urlhash)
 	"""
+	tokens = []
+	remaining = urlhash
+	limit = len(urlhash)
+
+	while not isDone(remaining) :
+		next_token = goDown(remaining, limit, corpus)
+		
+		#cant descend tree, must move to next branch
+		if next_token == '' :
+			remaining, limit = putBack(tokens, remaining)
+			continue
+
+
+
+
+		remaining = remaining[len(next_token):]
+
+
+
 	return tokenized
 
 
