@@ -63,6 +63,20 @@ def clean( urlhash ) :
 	cleaned = ''.join(char for char in cleaned if char in validchars)
 	return cleaned
 
+def isDone( remaining ) :
+	"""
+	Returns : True if remaining is empty string, else False
+	"""
+	return remaining == ''
+
+def Down( remaining, limit ) :
+	"""
+	Requires: limit <=len(remaining)
+	Returns : longest valid substring from remaining starting from beginning (in corpus or is number)
+				otherwise, throws exception
+	"""
+	return
+
 def get_next_token( urlhash , corpus ) :
 	#returns the longest possible token starting from the left
 	#if no token returns ''
@@ -77,7 +91,6 @@ def get_next_token( urlhash , corpus ) :
 		return cand, remaining
 
 	while True:
-		# print 'cand |{}| and remaining |{}|'.format(cand, remaining)
 		if cand in corpus or cand == '' :
 			break
 		cand, remaining = cand[:-1], cand[-1] + remaining 
