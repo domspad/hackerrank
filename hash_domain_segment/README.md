@@ -1,3 +1,5 @@
+# PASSED
+
 # Hashtag and URL Segmentation
 
 Based on the [problem](https://www.hackerrank.com/challenges/url-hashtag-segmentation) of resolving a url link like ```www.thereisasnakeinmyboot.com``` or hashtag ```#GoAllTheWay44```
