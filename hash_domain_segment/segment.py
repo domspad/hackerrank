@@ -152,37 +152,6 @@ def tokenize(urlhash, corpus) :
 	return tokenized
 
 
-def get_next_token( urlhash , corpus ) :
-	#returns the longest possible token starting from the left
-	#if no token returns ''
-	cand, remaining = urlhash, ''
-
-	#handle the number case...
-	if urlhash[0].isdigit() :
-		for ind, char in enumerate(cand) :
-			if not char.isdigit() :
-				cand, remaining = cand[:ind], cand[ind:]
-				break
-		return cand, remaining
-
-	while True:
-		if cand in corpus or cand == '' :
-			break
-		cand, remaining = cand[:-1], cand[-1] + remaining 
-
-	return (cand, remaining)
-
-def segment( urlhash ) :
-	#The main function
-	#returns the segmented version of the given url or hashtag (without the url and hashtage features)
-	tokens = []
-
-	while urlhash != '' :
-		cand, urlhash = get_next_token(urlhash, corpus)
-		tokens.append(cand)
-
-	return ' '.join(tokens)
-
 if __name__ == '__main__' :
 
 	corpusfile = 'words.txt'
@@ -192,5 +161,5 @@ if __name__ == '__main__' :
 	for num in xrange(iterations) :
 
 		urlhash = clean(raw_input())
-		print segment(urlhash)
+		print tokenize(urlhash)
 
