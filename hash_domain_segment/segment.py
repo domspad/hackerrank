@@ -75,7 +75,7 @@ def goDown( remaining, limit, corpus ) :
 	"""
 	Steps down the search tree
 
-	Requires: limit <=len(remaining)
+	Requires: limit <=len(remaining)+1, remaining != ''
 	Returns : longest valid substring (of length < limit) from remaining starting from beginning (in corpus or is number)
 				otherwise, returns '' 
 	"""
@@ -85,19 +85,21 @@ def goDown( remaining, limit, corpus ) :
 	if longest[0].isdigit() :
 		for ind, char in enumerate(longest) :
 			if not char.isdigit():
-				longest = longest[:ind]
-				break
+				longest = longest[:ind]	
+				break			
+		return longest
+
 
 	#handle the word case
 	while True:
-		if longest in corpus or longest == '':
+		if longest in corpus or longest == '' :
 			break
 		longest = longest[:-1]
 
 	return longest
 
 
-def putBack( tokens, remaining):
+def putBack( tokens, remaining ):
 	"""
 	Moves back up the tree and sets up so next search step goes down next branch (if there)
 
@@ -121,11 +123,11 @@ def tokenize(urlhash, corpus) :
 	The main algorithm -- performs depth first search to tokenize the urlhash into words
 
 	Returns : tokenized version of urlhash (as string) 
-				if catches exception from putBack, then prints 'FAILURE {}'.format(urlhash)
+				if not possible to tokenize given corpus, then returns 'FAILURE {}'.format(urlhash)
 	"""
 	tokens = []
 	remaining = urlhash
-	limit = len(urlhash)
+	limit = len(urlhash) + 1
 
 	while not isDone(remaining) :
 		next_token = goDown(remaining, limit, corpus)
@@ -133,14 +135,19 @@ def tokenize(urlhash, corpus) :
 		#cant descend tree, must move to next branch
 		if next_token == '' :
 			remaining, limit = putBack(tokens, remaining)
+			
+			# tokens was empty so there are no ways to tokenize the urlhash!
+			if limit == 0 :
+				return 'FAILURE TO TOKENIZE {}'.format(urlhash)
+
 			continue
 
-
-
-
+		#successful goDown so update state
+		tokens.append(next_token)
 		remaining = remaining[len(next_token):]
+		limit = len(remaining)+1
 
-
+	tokenized = ' '.join(tokens)
 
 	return tokenized
 
