@@ -63,37 +63,94 @@ def clean( urlhash ) :
 	cleaned = ''.join(char for char in cleaned if char in validchars)
 	return cleaned
 
-def get_next_token( urlhash , corpus ) :
-	#returns the longest possible token starting from the left
-	#if no token returns ''
-	cand, remaining = urlhash, ''
+
+def isDone( remaining ) :
+	"""
+	Returns : True if remaining is empty string, else False
+	"""
+	return remaining == ''
+
+
+def goDown( remaining, limit, corpus ) :
+	"""
+	Steps down the search tree
+
+	Requires: limit <=len(remaining)+1, remaining != ''
+	Returns : longest valid substring (of length < limit) from remaining starting from beginning (in corpus or is number)
+				otherwise, returns '' 
+	"""
+	longest  = remaining[:limit-1]
 
 	#handle the number case...
-	if urlhash[0].isdigit() :
-		for ind, char in enumerate(cand) :
-			if not char.isdigit() :
-				cand, remaining = cand[:ind], cand[ind:]
-				break
-		return cand, remaining
+	if longest[0].isdigit() :
+		for ind, char in enumerate(longest) :
+			if not char.isdigit():
+				longest = longest[:ind]	
+				break			
+		return longest
 
+
+	#handle the word case
 	while True:
-		# print 'cand |{}| and remaining |{}|'.format(cand, remaining)
-		if cand in corpus or cand == '' :
+		if longest in corpus or longest == '' :
 			break
-		cand, remaining = cand[:-1], cand[-1] + remaining 
+		longest = longest[:-1]
 
-	return (cand, remaining)
+	return longest
 
-def segment( urlhash ) :
-	#The main function
-	#returns the segmented version of the given url or hashtag (without the url and hashtage features)
+
+def putBack( tokens, remaining ):
+	"""
+	Moves back up the tree and sets up so next search step goes down next branch (if there)
+
+	Requires : tokens non empty
+	Effects : pops element from tokens if nonempty
+	Returns : tokens with one less token, and remaining prefixed with popped token, and size of popped token
+				if tokens == []  then limit == 0
+	"""
+	try :
+		last_token = tokens.pop()
+		remaining = last_token + remaining
+		limit = len(last_token)
+
+	except IndexError :
+		limit = 0
+
+	return remaining, limit
+
+def tokenize(urlhash, corpus) :
+	"""
+	The main algorithm -- performs depth first search to tokenize the urlhash into words
+
+	Returns : tokenized version of urlhash (as string) 
+				if not possible to tokenize given corpus, then returns 'FAILURE {}'.format(urlhash)
+	"""
 	tokens = []
+	remaining = urlhash
+	limit = len(urlhash) + 1
 
-	while urlhash != '' :
-		cand, urlhash = get_next_token(urlhash, corpus)
-		tokens.append(cand)
+	while not isDone(remaining) :
+		next_token = goDown(remaining, limit, corpus)
+		
+		#cant descend tree, must move to next branch
+		if next_token == '' :
+			remaining, limit = putBack(tokens, remaining)
+			
+			# tokens was empty so there are no ways to tokenize the urlhash!
+			if limit == 0 :
+				return 'FAILURE TO TOKENIZE {}'.format(urlhash)
 
-	return ' '.join(tokens)
+			continue
+
+		#successful goDown so update state
+		tokens.append(next_token)
+		remaining = remaining[len(next_token):]
+		limit = len(remaining)+1
+
+	tokenized = ' '.join(tokens)
+
+	return tokenized
+
 
 if __name__ == '__main__' :
 
@@ -104,5 +161,5 @@ if __name__ == '__main__' :
 	for num in xrange(iterations) :
 
 		urlhash = clean(raw_input())
-		print segment(urlhash)
+		print tokenize(urlhash)
 
