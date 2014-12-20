@@ -7,58 +7,60 @@ This program accepts a url or hashtag from stdin and prints the underlying phras
 			'www.ieatfishes.com'	 ----> 	'i eat fishes'
 			'#ILove3000' 			 ---->	'i love 3000'
 
+Assumed possible url forms:
+
+			prefixes : combinations of 'http<s>://' and 'www.' and ''
+			suffixes : anything after first '.' AFTER the prefixes have been removed
+
+Assumed hashtag form : #<alpha,nums>
+
 """
 
+def dropUrlPrefix(url) :
+	"""
+	Requires : 
+	Returns : returns url without prefix '<http<s>://><www.>'  
+	"""
+	if len(url) >= 8 and url[:8] == 'https://' :
+		url = url[8:]
+	elif len(url) >= 7 and url[:7] == 'http://' :
+		url = url[7:]
+	if len(url) >= 4 and url[:4] == 'www.' :
+		url = url[4:]
+	return url
+
+def dropUrlSuffix(url) :
+	"""
+	Requires : '.' in url 
+	Returns : url without any suffixes like '.com', '.co.uk',...
+	"""
+	nextdot = url.find('.')
+	url = url[:nextdot]
+	return url
+
+
 def clean( urlhash ) :
-	# returns urlhash without url decorations, hashtags, lowercase, and so just numbers and letters
+	"""
+	Requires : urlhash at least one characters
+	Returns : urlhash without hashtag or url decorations (just concatenated lowercase letters and numbers)
+	"""
 	cleaned = urlhash.lower()
 	
 	# if hashtag
 	if cleaned[0] == '#' :
 		cleaned = cleaned[1:]
 
-	# if website url
-
-	"""
-	contains '.'
-		start 
-			if http<s>://
-			if www.
-			
-			(-
-			www.
-			http<s>://
-			http<s>://www.)
-
-		end
-			remove after next dot
-
-			(.com
-			.co.uk
-			.sfgov.org/
-			.io/)
-	"""
-	#check if webaddress
+	#check if url
 	elif '.' in cleaned :
-		#remove possible prefixes
-		if cleaned[:8] == 'https://' :
-			cleaned = cleaned[8:]
-		elif cleaned[:7] == 'http://' :
-			cleaned = cleaned[7:]
-		if cleaned[:4] == 'www.' :
-			cleaned = cleaned[4:]
-
-	#remove suffixes by removing everything after next dot
-		nextdot = cleaned.find('.')
-		cleaned = cleaned[:nextdot]
-
+		cleaned = dropUrlPrefix(cleaned)
+		cleaned = dropUrlSuffix(cleaned)
+	
 	# outside cases we consider
 	else :
 		'neither?!'
 	# for any lingering non-alphanumeric characters
 	validchars = 'abcdefghijklmnopqrstuvwxyz0123456789'
 	cleaned = ''.join(char for char in cleaned if char in validchars)
-
 	return cleaned
 
 def get_next_token( urlhash , corpus ) :
