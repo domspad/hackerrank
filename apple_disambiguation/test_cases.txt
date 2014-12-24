@@ -1,0 +1,7 @@
+6
+fruit||Justin ate many apples.
+computer-company||Apple's pension funds are low.
+computer-company||Apple Inc. is great.
+fruit||"Hey! watch out! Apples can be dangerous!" said John.
+fruit||What the hack?! Apples aren't green.
+computer-company||This is a reference. [2] Apple's computers run slow.
