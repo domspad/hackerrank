@@ -26,6 +26,12 @@ def whichApple(text) :
 
 	return 'computer-company' #or fruit
 
+def extract_apple(text) :
+	"""
+	Requires: some form of 'apple' shows up in text (i.e. capitalized, plural, possessive)
+	Returns: the form of the first instance found and its starting index in the text
+	"""
+
 def whichApple_tests() :
 	testcase_file = './test_cases.txt'
 	with open(testcase_file, 'r') as f :
@@ -33,6 +39,7 @@ def whichApple_tests() :
 		for i in xrange(num) :
 			answer, text = f.readline().split('||')
 			assert whichApple(text) == answer
+	return
 
 if __name__ == '__main__' :
 
