@@ -44,7 +44,7 @@ def extractApple(text) :
 	# 		#after end of sentence?
 	return 'Apple',0
 
-def whichApple_tests() :
+def whichAppleTests() :
 	testcase_file = './test_cases.txt'
 	with open(testcase_file, 'r') as f :
 		num = int(f.readline())
@@ -55,7 +55,7 @@ def whichApple_tests() :
 
 if __name__ == '__main__' :
 
-	whichApple_tests()
+	whichAppleTests()
 
 	#formatted to accept Hackerrank like input
 	iterations = int(raw_input())
